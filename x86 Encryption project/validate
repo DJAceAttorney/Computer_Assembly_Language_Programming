@@ -1,0 +1,101 @@
+     1                                  ;This function validates the string that the user enters
+     2                                  ;The string must start with a capital letter and end with an !,.,? 
+     3                                  
+     4                                  
+     5                                  	
+     6                                  section .bss
+     7                                  
+     8                                  section .text
+     9                                  global validate
+    10                                  
+    11                                  
+    12                                  	
+    13                                  validate:	
+    14 00000000 30C0                    	xor al, al
+    15 00000002 8A07                    	mov al, [rdi]
+    16                                  
+    17                                  
+    18 00000004 3C41                    	cmp al, 'A'
+    19 00000006 7473                    	je end_char
+    20 00000008 3C42                    	cmp al, 'B'
+    21 0000000A 746F                            je end_char
+    22 0000000C 3C43                    	cmp al, 'C'
+    23 0000000E 746B                            je end_char
+    24 00000010 3C44                            cmp al, 'D'
+    25 00000012 7467                            je end_char
+    26 00000014 3C45                            cmp al, 'E'
+    27 00000016 7463                            je end_char
+    28 00000018 3C46                            cmp al, 'F'
+    29 0000001A 745F                            je end_char
+    30 0000001C 3C47                            cmp al, 'G'
+    31 0000001E 745B                            je end_char
+    32 00000020 3C48                            cmp al, 'H'
+    33 00000022 7457                            je end_char
+    34 00000024 3C49                            cmp al, 'I'
+    35 00000026 7453                            je end_char
+    36 00000028 3C4A                            cmp al, 'J'
+    37 0000002A 744F                            je end_char
+    38 0000002C 3C4B                            cmp al, 'K'
+    39 0000002E 744B                            je end_char
+    40 00000030 3C4C                            cmp al, 'L'
+    41 00000032 7447                            je end_char
+    42 00000034 3C4D                            cmp al, 'M'
+    43 00000036 7443                            je end_char
+    44 00000038 3C4E                            cmp al, 'N'
+    45 0000003A 743F                            je end_char
+    46 0000003C 3C4F                            cmp al, 'O'
+    47 0000003E 743B                            je end_char
+    48 00000040 3C50                            cmp al, 'P'
+    49 00000042 7437                            je end_char
+    50 00000044 3C51                            cmp al, 'Q'
+    51 00000046 7433                            je end_char
+    52 00000048 3C52                            cmp al, 'R'
+    53 0000004A 742F                            je end_char
+    54 0000004C 3C53                            cmp al, 'S'
+    55 0000004E 742B                            je end_char
+    56 00000050 3C54                            cmp al, 'T'
+    57 00000052 7427                            je end_char
+    58 00000054 3C55                            cmp al, 'U'
+    59 00000056 7423                            je end_char
+    60 00000058 3C56                            cmp al, 'V'
+    61 0000005A 741F                            je end_char
+    62 0000005C 3C57                            cmp al, 'W'
+    63 0000005E 741B                            je end_char
+    64 00000060 3C58                            cmp al, 'X'
+    65 00000062 7417                            je end_char
+    66 00000064 3C59                            cmp al, 'Y'
+    67 00000066 7413                            je end_char
+    68 00000068 3C5A                    	cmp al, 'Z'
+    69 0000006A 740F                            je end_char
+    70                                  
+    71 0000006C EB09                    	jmp incorrect
+    72                                  
+    73                                  correct:
+    74 0000006E 4831C0                  	xor rax, rax
+    75 00000071 B801000000                      mov rax, 1
+    76 00000076 C3                      	ret
+    77                                  
+    78                                  incorrect:
+    79                                  
+    80 00000077 4831C0                  	xor rax, rax
+    81 0000007A C3                      	ret
+    82                                  
+    83                                  	
+    84                                  end_char:
+    85                                  
+    86 0000007B 30C0                    	xor al, al
+    87 0000007D 4C01D7                  	add rdi, r10
+    88                                  
+    89 00000080 48FFCF                  	dec rdi
+    90 00000083 48FFCF                  	dec rdi
+    91                                  	
+    92 00000086 8A07                    	mov al, [rdi]
+    93                                  	
+    94 00000088 3C2E                    	cmp al, '.'		;correct end values 
+    95 0000008A 74E2                            je correct
+    96 0000008C 3C3F                    	cmp al, '?'
+    97 0000008E 74DE                            je correct
+    98 00000090 3C21                    	cmp al, '!'
+    99 00000092 74DA                            je correct
+   100                                  	
+   101 00000094 EBE1                    	jmp incorrect

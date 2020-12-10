@@ -1,0 +1,178 @@
+     1                                  
+     2                                  ;This program jumps characters within the string. The user chooses how many character jumps they want
+     3                                  ;For whatever reason, this function occasionally outputs a random set of characters when showing the jumped string. I talked to the professor about it
+     4                                  ;and he said it was fine since we couldn't find any problem within the program that could be causing it. The issue will happen once but if you run the
+     5                                  ;program again it will output perfectly fine
+     6                                  	
+     7                                  	
+     8                                  	extern square_Root
+     9                                  	extern scanf
+    10                                  	extern printf
+    11                                  	extern root
+    12                                  	
+    13                                  	
+    14                                  	section .data
+    15                                  
+    16 00000000 494E56414C4944204A-     invalid:        db      "INVALID JUMP OPTION ", 10
+    16 00000009 554D50204F5054494F-
+    16 00000012 4E200A             
+    17                                  len_i           equ     $-invalid
+    18                                  	
+    19 00000015 43757272656E74206D-     current:        db      "Current message: "
+    19 0000001E 6573736167653A20   
+    20                                  len_c           equ     $-current
+    21                                  
+    22 00000026 4A756D7020656E6372-     jumpE:        	db      "Jump encryption: "
+    22 0000002F 797074696F6E3A20   
+    23                                  len_je           equ     $-jumpE
+    24                                  	
+    25 00000037 0A                      new_line        db      10
+    26                                  
+    27 00000038 256400                  fmt_scan:       db "%d", 0
+    28                                  
+    29 0000003B 456E746572206A756D-     fmt_num: db "Enter jump interval between 2-%d-> " , 0
+    29 00000044 7020696E7465727661-
+    29 0000004D 6C206265747765656E-
+    29 00000056 20322D25642D3E2000 
+    30                                  
+    31                                  	
+    32                                          section .bss
+    33 00000000 <res 00000004>          user_option     resb    4
+    34 00000004 <res 00000004>          print_char      resb    4
+    35 00000008 <res 00000004>          root_num	resb	4
+    36                                  	
+    37                                          section .text
+    38                                  global jump_String
+    39                                  
+    40                                  
+    41                                  jump_String:
+    42                                  
+    43 00000000 4D31E4                  	xor r12, r12
+    44 00000003 4D31ED                  	xor r13, r13
+    45                                  
+    46 00000006 4C8B27                  	mov r12, [rdi]		;moves string into r12
+    47 00000009 4989F6                  	mov r14, rsi		;moves length of string into r14
+    48                                  
+    49                                  	
+    50 0000000C 4C89F7                  	mov rdi, r14		;gets square root 
+    51 0000000F E8(00000000)            	call root
+    52 00000014 48890425[08000000]      	mov [root_num], rax
+    53                                  
+    54 0000001C 4989C5                  	mov r13, rax
+    55                                  
+    56                                  	
+    57 0000001F 48BF-                   	mov     rdi,fmt_num	;prints root of string length
+    57 00000021 [3B00000000000000] 
+    58 00000029 488B3425[08000000]              mov     rsi,[root_num]
+    59 00000031 B800000000                      mov     rax,0
+    60 00000036 E8(00000000)                    call    printf
+    61                                  	
+    62                                  			
+    63 0000003B 48BF-                   	mov rdi, fmt_scan	;gets user input
+    63 0000003D [3800000000000000] 
+    64 00000045 48BE-                   	mov rsi, user_option
+    64 00000047 [0000000000000000] 
+    65 0000004F B800000000              	mov rax, 0
+    66 00000054 E8(00000000)            	call scanf
+    67                                  
+    68                                  
+    69 00000059 4D31D2                  	xor r10, r10
+    70 0000005C 4983C202                	add r10, 2		;min jump value
+    71                                  	
+    72                                  
+    73 00000060 44381425[00000000]      	cmp [user_option], r10b  ;checks if user option is less than 2
+    74 00000068 7C67                            jl invalid_option
+    75                                  
+    76 0000006A 44382C25[00000000]              cmp [user_option], r13b  ;check if user option is more than root of length
+    77 00000072 7F5D                            jg invalid_option
+    78                                  
+    79                                  	
+    80                                  	
+    81 00000074 B801000000              	mov rax, 1              ;displays "Current message: "
+    82 00000079 BF01000000                      mov rdi, 1
+    83 0000007E 48BE-                           mov rsi, current
+    83 00000080 [1500000000000000] 
+    84 00000088 BA11000000                      mov rdx, len_c
+    85 0000008D 0F05                            syscall
+    86                                  
+    87 0000008F B801000000              	mov rax, 1              ;displays current message
+    88 00000094 BF01000000                      mov rdi, 1
+    89 00000099 4C89E6                          mov rsi, r12
+    90 0000009C 4C89F2                          mov rdx, r14
+    91 0000009F 0F05                            syscall
+    92                                  
+    93 000000A1 B801000000              	mov rax, 1              ;displays "Jump encryption: "
+    94 000000A6 BF01000000                      mov rdi, 1
+    95 000000AB 48BE-                           mov rsi, jumpE
+    95 000000AD [2600000000000000] 
+    96 000000B5 BA11000000                      mov rdx, len_je
+    97 000000BA 0F05                            syscall
+    98                                  	
+    99                                  
+   100 000000BC 49FFCE                  	dec r14
+   101 000000BF 4D31D2                  	xor r10, r10
+   102 000000C2 4D89E2                  	mov r10, r12
+   103 000000C5 4D01F2                  	add r10, r14
+   104 000000C8 4983EA01                	sub r10, 1
+   105                                  
+   106 000000CC 4D89E5                  	mov r13, r12
+   107 000000CF EB1C                    	jmp jumpString
+   108                                  
+   109                                  
+   110                                  invalid_option:
+   111                                  
+   112 000000D1 B801000000              	mov rax, 1              ;displays INVALID
+   113 000000D6 BF01000000                      mov rdi, 1
+   114 000000DB 48BE-                           mov rsi, invalid
+   114 000000DD [0000000000000000] 
+   115 000000E5 BA15000000                      mov rdx, len_i
+   116 000000EA 0F05                            syscall
+   117                                  	
+   118 000000EC C3                      	ret
+   119                                  	
+   120                                  jumpString:
+   121                                  
+   122 000000ED 4983FE00                	cmp r14, 0
+   123 000000F1 7447                    	je end
+   124                                  
+   125 000000F3 4D39D4                  	cmp r12, r10
+   126 000000F6 7F37                    	jg reset
+   127                                  
+   128 000000F8 4D31C9                  	xor r9, r9
+   129 000000FB 458A0C24                	mov r9b, [r12]
+   130 000000FF 44880C25[04000000]      	mov [print_char], r9b
+   131                                  
+   132 00000107 B801000000              	mov rax, 1              ;displays a character
+   133 0000010C BF01000000                      mov rdi, 1
+   134 00000111 48BE-                           mov rsi, print_char
+   134 00000113 [0400000000000000] 
+   135 0000011B BA01000000                      mov rdx, 1
+   136 00000120 0F05                            syscall
+   137                                  
+   138 00000122 49FFCE                  	dec r14
+   139                                  
+   140                                  	
+   141 00000125 44022425[00000000]      	add r12b, [user_option]
+   142                                  
+   143 0000012D EBBE                    	jmp jumpString
+   144                                  
+   145                                  
+   146                                  reset:	
+   147 0000012F 49FFC5                  	inc r13
+   148 00000132 4D31E4                  	xor r12, r12
+   149 00000135 4D89EC                  	mov r12, r13
+   150                                  
+   151                                  	
+   152 00000138 EBB3                    	jmp jumpString
+   153                                  	
+   154                                  end:
+   155                                  
+   156 0000013A B801000000              	mov rax, 1              ;prints out new line
+   157 0000013F BF01000000                      mov rdi, 1
+   158 00000144 48BE-                           mov rsi, new_line
+   158 00000146 [3700000000000000] 
+   159 0000014E BA01000000                      mov rdx, 1
+   160 00000153 0F05                            syscall
+   161                                  
+   162                                  	
+   163 00000155 C3                      	ret

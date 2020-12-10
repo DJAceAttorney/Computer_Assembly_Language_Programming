@@ -1,0 +1,29 @@
+     1                                  ;This function replaces the old string with the new string
+     2                                  
+     3                                  section .text
+     4                                  global string_mov
+     5                                  
+     6                                  
+     7                                  string_mov:
+     8                                  
+     9 00000000 30C0                    	xor al, al
+    10 00000002 EB00                    	jmp move_string
+    11                                  	
+    12                                  move_string:	
+    13                                  
+    14                                  
+    15 00000004 4883FA00                	cmp rdx, 0
+    16 00000008 7411                    	je done
+    17                                  
+    18 0000000A 8A07                    	mov al, [rdi]
+    19 0000000C 8806                    	mov [rsi], al
+    20                                  
+    21 0000000E 4883C701                	add rdi, 1
+    22 00000012 4883C601                        add rsi, 1
+    23                                  	
+    24 00000016 48FFCA                  	dec rdx
+    25 00000019 EBE9                    	jmp move_string
+    26                                  	
+    27                                  done:
+    28 0000001B C3                      	ret
+    29                                  	
